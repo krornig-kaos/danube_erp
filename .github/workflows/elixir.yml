@@ -36,11 +36,20 @@ jobs:
       - name: Install dependencies
         run: mix deps.get
 
+      - name: Check if assets/package.json exists
+        id: check_assets
+        run: |
+          if [ -f assets/package.json ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install Node.js dependencies
+        if: steps.check_assets.outputs.exists == 'true'
         run: |
           cd assets
           npm install
-        if: exists('assets/package.json')
 
       - name: Check code format
         run: mix format --check-formatted
