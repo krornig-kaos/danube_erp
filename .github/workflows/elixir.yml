@@ -27,31 +27,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cache Mix dependencies
-        uses: actions/cache@v3
-        with:
-          path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-mix-
-
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v3
-        with:
-          path: assets/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('assets/package-lock.json', 'assets/npm-shrinkwrap.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Set up Elixir
-        uses: erlef/setup-beam@v1
-        with:
-          elixir-version: "1.15"
-          otp-version: "26"
-
-      - name: Install dependencies
-        run: mix deps.get
-
       - name: Check if assets/package.json exists
         id: check_assets
         run: |
@@ -61,11 +36,37 @@ jobs:
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Cache Node.js dependencies
+        if: steps.check_assets.outputs.exists == 'true'
+        uses: actions/cache@v3
+        with:
+          path: assets/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('assets/package-lock.json', 'assets/npm-shrinkwrap.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install Node.js dependencies
         if: steps.check_assets.outputs.exists == 'true'
         run: |
           cd assets
           npm install
+
+      - name: Cache Mix dependencies
+        uses: actions/cache@v3
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.15"
+          otp-version: "26"
+
+      - name: Install dependencies
+        run: mix deps.get
 
       - name: Check code format
         run: mix format --check-formatted
