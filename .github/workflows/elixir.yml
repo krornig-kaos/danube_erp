@@ -27,6 +27,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache Mix dependencies
+        uses: actions/cache@v3
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v3
+        with:
+          path: assets/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('assets/package-lock.json', 'assets/npm-shrinkwrap.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Set up Elixir
         uses: erlef/setup-beam@v1
         with:
@@ -61,4 +77,4 @@ jobs:
         env:
           MIX_ENV: test
           DATABASE_URL: ecto://postgres:postgres@localhost/danube_erp_test
-        run: mix test
+        run: mix test --max-cases 6
