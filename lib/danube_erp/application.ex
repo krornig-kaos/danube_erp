@@ -5,6 +5,8 @@ defmodule DanubeErp.Application do
 
   use Application
 
+  alias DanubeErp.Plugins.DynamicLoader
+
   @impl true
   def start(_type, _args) do
     children = [
@@ -19,7 +21,7 @@ defmodule DanubeErp.Application do
     ]
 
     # Cargar plugins dinámicos al iniciar la aplicación
-    DanubeErp.Plugins.DynamicLoader.load_plugins()
+    DynamicLoader.load_plugins()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
