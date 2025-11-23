@@ -1,5 +1,6 @@
 defmodule DanubeErp.Plugins.DynamicLoader do
-  @plugins_dir Path.expand("lib/plugins_dynamic", File.cwd!())
+  @moduledoc false
+  @plugins_dir Path.expand("lib/plugins", File.cwd!())
 
   def load_plugins do
     if File.exists?(@plugins_dir) do

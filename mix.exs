@@ -58,6 +58,7 @@ defmodule DanubeErp.MixProject do
        app: false,
        compile: false,
        depth: 1},
+      {:credo, "~> 1.7.13", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.16"},
       {:req, "~> 0.5"},
       {:telemetry_metrics, "~> 1.0"},

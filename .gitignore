@@ -35,3 +35,5 @@ danube_erp-*.tar
 npm-debug.log
 /assets/node_modules/
 
+lib/plugins
+!**/.keep

@@ -1,18 +1,52 @@
-# DanubeErp
+# Danube ERP
 
-To start your Phoenix server:
+ERP modular basado en arquitectura microkernel, con soporte para multi-tenancy jerárquico y plugins dinámicos.
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Requisitos previos
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+- Elixir >= 1.15
+- Erlang/OTP >= 26
+- Node.js >= 18
+- PostgreSQL >= 13
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Instalación
 
-## Learn more
+1. Clona el repositorio:
 
-* Official website: https://www.phoenixframework.org/
-* Guides: https://hexdocs.pm/phoenix/overview.html
-* Docs: https://hexdocs.pm/phoenix
-* Forum: https://elixirforum.com/c/phoenix-forum
-* Source: https://github.com/phoenixframework/phoenix
+   ```sh
+   git clone https://github.com/krornig-kaos/danube_erp.git
+   cd danube_erp
+   ```
+
+2. Instala las dependencias:
+
+   ```sh
+   mix deps.get
+   ```
+
+3. Instala las dependencias de Node.js:
+
+   ```sh
+   cd assets && npm install && cd ..
+   ```
+
+4. Configura la base de datos en `config/dev.exs` y crea la base:
+
+   ```sh
+   mix ecto.setup
+   ```
+
+5. Inicia el servidor:
+   ```sh
+   mix phx.server
+   ```
+
+## Estructura del proyecto
+
+- `lib/danube_erp/` — Núcleo del sistema
+- `lib/plugins/` — Plugins/módulos funcionales
+- `docs/` — Documentación y análisis
+
+## Documentación
+
+Consulta la carpeta `docs/fase_1/` para detalles de arquitectura, módulos y decisiones.

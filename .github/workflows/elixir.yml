@@ -1,0 +1,55 @@
+name: Elixir CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:13
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: danube_erp_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.15"
+          otp-version: "26"
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Install Node.js dependencies
+        run: |
+          cd assets
+          npm install
+        if: exists('assets/package.json')
+
+      - name: Check code format
+        run: mix format --check-formatted
+
+      - name: Run Credo (linter)
+        run: mix credo --strict
+
+      - name: Run tests
+        env:
+          MIX_ENV: test
+          DATABASE_URL: ecto://postgres:postgres@localhost/danube_erp_test
+        run: mix test
