@@ -88,8 +88,8 @@ defmodule DanubeErpWeb do
       import DanubeErpWeb.CoreComponents
 
       # Common modules used in templates
-      alias Phoenix.LiveView.JS
       alias DanubeErpWeb.Layouts
+      alias Phoenix.LiveView.JS
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
